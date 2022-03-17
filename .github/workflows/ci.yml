@@ -48,7 +48,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_KNOWN_HOSTS }}
-          username: smargelov
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: cd ${{ secrets.SSH_DIR }} && docker-compose stop
 
@@ -59,7 +59,7 @@ jobs:
           ARGS: "-rltgoDzvO --delete"
           SOURCE: "."
           REMOTE_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
-          REMOTE_USER: "smargelov"
+          REMOTE_USER: "root"
           TARGET: ${{ secrets.SSH_DIR }}
           EXCLUDE: "/dist/, /node_modules/"
 
@@ -67,6 +67,6 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_KNOWN_HOSTS }}
-          username: smargelov
+          username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: cd ${{ secrets.SSH_DIR }} && docker-compose up -d --build
