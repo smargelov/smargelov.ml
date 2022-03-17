@@ -44,21 +44,29 @@ jobs:
 #      - name: Run tests 🧪
 #        run: npm run test
 
-#      - name: Deploy to Server 🚀
-#        uses: easingthemes/ssh-deploy@main
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-#          ARGS: "-rltgoDzvO --delete"
-#          SOURCE: "."
-#          REMOTE_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
-#          REMOTE_USER: "smargelov"
-#          TARGET: ${{ secrets.SSH_DIR }}
-#          EXCLUDE: "/dist/, /node_modules/"
+      - name: Stop Docker-compose 🛑
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          username: smargelov
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: cd ${{ secrets.SSH_DIR }} && docker-compose stop
 
-#      - name: Start Docker-compose 🐳
-#        uses: appleboy/ssh-action@master
-#        with:
-#          host: ${{ secrets.SSH_KNOWN_HOSTS }}
-#          username: smargelov
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          script: cd ${{ secrets.SSH_DIR }} && docker-compose build && docker-compose up -d
+      - name: Deploy to Server 🚀
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rltgoDzvO --delete"
+          SOURCE: "."
+          REMOTE_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
+          REMOTE_USER: "smargelov"
+          TARGET: ${{ secrets.SSH_DIR }}
+          EXCLUDE: "/dist/, /node_modules/"
+
+      - name: Start Docker-compose 🐳
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          username: smargelov
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: cd ${{ secrets.SSH_DIR }} && docker-compose up -d --build
