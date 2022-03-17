@@ -1,0 +1,64 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [16]
+
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@master
+
+      - name: Setup node env 🏗
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ matrix.node }}
+          check-latest: true
+
+      - name: Cache node_modules 📦
+        uses: actions/cache@v2.1.4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies 👨🏻‍💻
+        run: npm ci --prefer-offline --no-audit
+#
+#      - name: Run linter 👀
+#        run: npm run lint
+#
+#      - name: Run tests 🧪
+#        run: npm run test
+
+#      - name: Deploy to Server 🚀
+#        uses: easingthemes/ssh-deploy@main
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#          ARGS: "-rltgoDzvO --delete"
+#          SOURCE: "."
+#          REMOTE_HOST: ${{ secrets.SSH_KNOWN_HOSTS }}
+#          REMOTE_USER: "smargelov"
+#          TARGET: ${{ secrets.SSH_DIR }}
+#          EXCLUDE: "/dist/, /node_modules/"
+
+#      - name: Start Docker-compose 🐳
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+#          username: smargelov
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: cd ${{ secrets.SSH_DIR }} && docker-compose build && docker-compose up -d
