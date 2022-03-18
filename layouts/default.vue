@@ -1,18 +1,19 @@
 <template>
-<main>
-  <header>
-    Header
-  </header>
+<main class="main">
   <nuxt/>
-  <footer>
-    footer
-  </footer>
 </main>
 </template>
 
 <script>
 export default {
-  name: 'default'
+  name: 'default',
+  head () {
+    return {
+      bodyAttrs: {
+        class: this.$exp.$classes.join(' ')
+      }
+    }
+  }
 }
 </script>
 
