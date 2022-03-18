@@ -44,14 +44,6 @@ jobs:
 #      - name: Run tests 🧪
 #        run: npm run test
 
-      - name: Stop Docker-compose 🛑
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_KNOWN_HOSTS }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ${{ secrets.SSH_DIR }} && docker-compose stop
-
       - name: Deploy to Server 🚀
         uses: easingthemes/ssh-deploy@main
         env:
@@ -69,4 +61,4 @@ jobs:
           host: ${{ secrets.SSH_KNOWN_HOSTS }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: cd ${{ secrets.SSH_DIR }} && docker-compose up -d --build
+          script: cd ${{ secrets.SSH_DIR }} && docker-compose up -d --build --force-recreate
