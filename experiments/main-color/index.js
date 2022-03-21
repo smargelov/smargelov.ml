@@ -5,7 +5,7 @@ export default {
   name: 'main-color',
 
   // Google optimize experiment id
-  experimentID: 'B5ips36lQ9qA0jdjZYsNpw',
+  experimentID: 'zOlqyHFqRdSW3K54_K4WgA',
 
   // [optional] specify number of sections for MVT experiments
   // sections: 1,
